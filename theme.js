@@ -98,6 +98,13 @@ function drawWheels(list) {
       place(card, Math.sign(offset || 1) * (SIDE + 1));
       wheelsEl.appendChild(card);
       card.offsetWidth;              // so the move to its place is animated
+    } else if (Math.abs(offset - Number(card.dataset.offset)) > 2) {
+      // A short list wraps: the picture that left one end is wanted at the other. It jumps
+      // there unanimated, so it does not slide across the others.
+      card.style.transition = "none";
+      place(card, Math.sign(offset || 1) * (SIDE + 1));
+      card.offsetWidth;
+      card.style.transition = "";
     }
     place(card, offset);
   }
