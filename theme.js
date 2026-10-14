@@ -308,18 +308,17 @@ function discard(layer) {
 
 const artFader = makeFader(artEl);
 
-// The playfield video when the table has one, else its picture.
+// The playfield video or picture, as the person's Playfield Media Priority says; core falls
+// back to the other when a table has only one, and to its own FSS picture for the playfield.
 function drawArt(entry, index) {
-  const video = entry.media.includes("playfield_video");
-  const still = ["playfield", "playfield_fss"].find((kind) => entry.media.includes(kind));
-  if (!video && !still) {
+  const art = vpin.getMedia(index, "playfield");
+  if (art.kind === "missing") {
     artFader.clear();
     return;
   }
 
-  // getMediaURL could answer with the still; getVideoURL is always the video. getImageURL
-  // has no FSS fallback, so a table with only an FSS picture is asked for it by name.
-  const url = video ? vpin.getVideoURL(index, "playfield") : vpin.getImageURL(index, still);
+  const video = art.kind === "video";
+  const url = art.url;
   artFader.show(url, () => {
     let node;
     if (video) {
