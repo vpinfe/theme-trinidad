@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VPinFE - Trinidad</title>
+  <!-- Core's stylesheet comes first so style.css can restyle what it provides:
+       the layout classes, the loading indicator and the hold ring. -->
+  <link rel="stylesheet" href="/core/common/vpinfe-style.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="/core/common/vpinfe-core.js"></script>
+</head>
+<body>
+  <!-- .vpinfe-upright turns the whole page to face the player when the cabinet mounts the
+       playfield screen sideways. Leave it on the outermost element. -->
+  <main class="stage vpinfe-upright" data-view="tables">
+
+    <!-- The playfield picture or video, or the collection backdrop. theme.js fills it. -->
+    <div id="art" class="art"></div>
+
+    <!-- The wheel: up to seven pictures on an arc, the selection in the middle one.
+         theme.js fills it. -->
+    <ol id="wheels" class="wheels"></ol>
+
+    <!-- The selected table, or the selected collection while the picker is open. -->
+    <section id="panel" class="panel">
+      <h1 id="title"></h1>
+      <p id="authors"></p>
+      <p id="facts" class="facts"></p>
+
+      <div id="stats" class="stats">
+        <div class="stat">
+          <span id="my-rating-label" class="stat-label"></span>
+          <span id="my-rating" class="stat-value"></span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">VPinPlay Rating</span>
+          <span id="community-rating" class="stat-value"></span>
+        </div>
+      </div>
+
+      <!-- The picture says Runtime and Start Count; the numbers sit in its two windows. -->
+      <div id="counters" class="counters" aria-label="Runtime and Start Count">
+        <span id="runtime" class="counter runtime"></span>
+        <span id="starts" class="counter starts"></span>
+      </div>
+    </section>
+
+    <!-- Shown when the list is empty. -->
+    <p id="empty" hidden></p>
+  </main>
+
+  <!-- Core mounts its dialogs here: the menu, the collection picker and confirms. -->
+  <div id="overlay-root"></div>
+
+  <script src="theme.js"></script>
+</body>
+</html>

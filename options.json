@@ -1,0 +1,13 @@
+{
+  "title": "Trinidad Options",
+  "description": "How the theme starts.",
+  "options": [
+    {
+      "key": "startCollectionSelection",
+      "name": "Start in Collection Selection",
+      "description": "Open the collection picker when the theme starts, instead of the table wheel.",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

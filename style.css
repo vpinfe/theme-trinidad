@@ -1,541 +1,390 @@
-:root {
-  --vw: 1vw;
-  --vh: 1vh;
-}
+/* Trinidad - the playfield picture full screen, an arc of wheels across the top and a glowing
+   panel about the selected table.
+
+   Most lengths are a fraction of the stage, so the page keeps its shape on any screen:
+   cqmin is the shorter side, cqw and cqh the width and height. */
 
 @font-face {
-  font-family: "RocketCommandExpanded";
+  font-family: "Rocket Command Expanded";
   src: url("fonts/RocketCommandExpanded-DYA5m.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Roboto-Bold";
-  src: url("fonts/Roboto-Bold.ttf") format("truetype");
+  font-family: "Rocket Command Gradient";
+  src: url("fonts/RocketCommandGradient-q2Jnl.otf") format("opentype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: "RocketCommandGradient";
-  src: url("fonts/RocketCommandGradient-q2Jnl.otf") format("opentype");
+  font-family: "Roboto Bold";
+  src: url("fonts/Roboto-Bold.ttf") format("truetype");
   font-display: swap;
 }
 
 html,
 body {
   margin: 0;
-  padding: 0;
   height: 100%;
-  background-color: black;
-  overflow: hidden;
-}
-
-body.window-table {
+  background: #000;
+  color: #f5f7fb;
   font-family: "Trebuchet MS", Arial, sans-serif;
-}
-
-#fadeContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc(100 * var(--vw));
-  height: calc(100 * var(--vh));
-  background-color: black;
-  transition: opacity 4.5s ease-in-out;
-  opacity: 1;
-  z-index: 10;
-  transform-origin: center center;
   overflow: hidden;
 }
 
-#fullscreen-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc(100 * var(--vw));
-  height: calc(100 * var(--vh));
-  background-color: black;
-  background-size: fill;
-  background-repeat: no-repeat;
-  background-position: center;
-  z-index: 9999;
-}
-
-img.fullscreen,
-video.fullscreen {
-  width: calc(100 * var(--vw));
-  height: calc(100 * var(--vh));
-  object-fit: fill;
-  display: block;
-  background-color: black;
-}
-
-body:not(.window-table) #fadeContainer .media-frame {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 320ms ease;
-}
-
-body:not(.window-table) #fadeContainer .media-frame.is-active {
-  opacity: 1;
-}
-
-body:not(.window-table) #fadeContainer .media-frame .fullscreen {
-  position: absolute;
-  inset: 0;
-}
-
-.bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc(100 * var(--vw));
-  height: calc(100 * var(--vh));
-  background-color: black;
-  background-size: fill;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 0s ease-in-out;
-  z-index: 9999;
-}
-
-.bg.visible {
-  opacity: 1;
-}
-
-:root {
-  --menu-rotation: 0deg;
-  --menu-width: calc(84 * var(--vw));
-  --menu-height: calc(84 * var(--vh));
-  --collection-menu-width: calc(50 * var(--vw));
-  --collection-menu-height: calc(50 * var(--vh));
-}
-
-#overlay-root {
-  position: absolute;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-}
-
-#menu-overlay-container {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-origin: center center;
-  pointer-events: none;
-}
-
-#table-loading-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 180ms ease;
-}
-
-#table-loading-overlay.is-visible {
-  opacity: 1;
-}
-
-.table-loading-spinner {
-  width: min(calc(34 * var(--vw)), calc(34 * var(--vh)), 500px);
-  height: min(calc(34 * var(--vw)), calc(34 * var(--vh)), 500px);
-  object-fit: contain;
-}
-
-#menu-overlay-container > iframe,
-#menu-overlay-container > * {
-  flex: 0 0 auto;
-  pointer-events: auto;
-}
-
-#menu-frame,
-#collection-menu-frame {
-  border: none;
-  border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-  background: transparent;
-  transform: none;
-  transform-origin: center center;
-}
-
-#collection-menu-frame {
-  width: var(--collection-menu-width);
-  height: var(--collection-menu-height);
-}
-
-#menu-frame {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(var(--menu-width), calc(var(--menu-height) * 1.5));
-  height: auto;
-  max-height: var(--menu-height);
-  aspect-ratio: 3 / 2;
-  transform: translate(-50%, -50%);
-}
-
-body.window-table .table-screen {
+/* The stage is styled by class, not by id: an id would outrank the rules in
+   vpinfe-style.css that give .vpinfe-upright its position and size, and the page would
+   stop turning on a sideways cabinet screen. */
+.stage {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  container-type: size;
   background: #000;
 }
 
-body.window-table .table-media-layer {
+[hidden] {
+  display: none !important;
+}
+
+/* --- The art ---------------------------------------------------------------------- */
+.art {
   position: absolute;
   inset: 0;
 }
 
-body.window-table .table-media-layer .media-frame {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 240ms ease;
-}
-
-body.window-table .table-media-layer .media-frame.is-active {
-  opacity: 1;
-}
-
-body.window-table .table-media-layer .fullscreen {
-  position: absolute;
-  inset: 0;
-}
-
-body.window-table .table-media-layer::after {
+/* The foot of the picture is darkened so the panel reads over any art. */
+.art::after {
   content: "";
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background:
     linear-gradient(180deg, rgba(10, 12, 18, 0.14) 0%, rgba(10, 12, 18, 0.04) 30%, rgba(0, 0, 0, 0) 52%),
     linear-gradient(0deg, rgba(4, 7, 12, 0.82) 0%, rgba(4, 7, 12, 0.46) 18%, rgba(4, 7, 12, 0.1) 34%, rgba(4, 7, 12, 0) 46%);
-  pointer-events: none;
 }
 
-body.window-table .wheel-overlay {
+/* A new picture waits at the back, invisible, until it has loaded, then fades in over the
+   one already there. */
+.layer {
   position: absolute;
-  inset: calc(0.8 * var(--vh)) calc(2.5 * var(--vw)) auto calc(2.5 * var(--vw));
-  height: calc(34 * var(--vh));
+  inset: 0;
+  transition: opacity 0.32s ease;
+}
+
+.layer.entering,
+.layer.exiting {
+  opacity: 0;
+}
+
+/* The picture fills the stage and is stretched to it. Core measures the picture against the
+   screen and turns it a quarter when its shape is the wrong way round; a turned picture has
+   its width and height swapped so it still fills the stage. */
+.layer > img,
+.layer > video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100cqw;
+  height: 100cqh;
+  object-fit: fill;
+  transform: translate(-50%, -50%) rotate(var(--vpinfe-playfield-media-rotation, 0deg));
+}
+
+.layer > [data-vpinfe-turned="true"] {
+  width: 100cqh;
+  height: 100cqw;
+}
+
+/* The collection backdrop is a landscape picture whose scene lies on its side: it is turned
+   a quarter and covers the stage. */
+.layer > img.backdrop {
+  width: 100cqh;
+  height: 100cqw;
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* --- The wheel -------------------------------------------------------------------- */
+/* The arc is laid out by theme.js, which sets where each card sits as --x (cqw across),
+   --y (cqmin down), --tilt, --scale and --fade. */
+.wheels {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
   pointer-events: none;
-  z-index: 2;
 }
 
-body.window-table .wheel-arc-glow {
-  display: none;
-}
-
-body.window-table .wheel-carousel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-body.window-table .wheel-card {
+.wheels li {
   position: absolute;
   left: 50%;
   top: 0;
-  width: calc(43.2 * var(--vw));
-  max-width: calc(52 * var(--vh));
-  min-width: calc(38 * var(--vh));
-  aspect-ratio: 2.5 / 1;
+  width: min(13cqw, 21cqmin);
+  height: min(13cqw, 21cqmin);
+  display: grid;
+  place-items: center;
   transform:
     translate(-50%, -50%)
-    translate(var(--arc-x, 0px), var(--arc-y, 0px))
-    rotate(calc(-90deg + var(--arc-rotation, 0deg)))
-    scale(var(--arc-scale, 1));
-  opacity: var(--arc-opacity, 1);
-  transition:
-    transform 320ms ease,
-    opacity 320ms ease,
-    filter 320ms ease;
-  filter: drop-shadow(0 calc(0.8 * var(--vh)) calc(1.8 * var(--vh)) rgba(0, 0, 0, 0.7));
+    translate(calc(var(--x) * 1cqw), calc(var(--y) * 1cqmin))
+    rotate(calc(var(--tilt) * 1deg))
+    scale(var(--scale));
+  opacity: var(--fade);
+  transition: transform 0.32s ease, opacity 0.32s ease, filter 0.32s ease;
+  filter: drop-shadow(0 0.8cqmin 1.8cqmin rgba(0, 0, 0, 0.7));
   z-index: 1;
   will-change: transform, opacity;
 }
 
-body.window-table .wheel-card.is-selected {
+.wheels li.selected {
   filter:
-    drop-shadow(0 0 calc(1.8 * var(--vh)) rgba(255, 245, 196, 1))
-    drop-shadow(0 calc(1.1 * var(--vh)) calc(2 * var(--vh)) rgba(0, 0, 0, 0.8));
+    drop-shadow(0 0 1.8cqmin rgba(255, 245, 196, 1))
+    drop-shadow(0 1.1cqmin 2cqmin rgba(0, 0, 0, 0.8));
   z-index: 3;
 }
 
-body.window-table .wheel-card img,
-body.window-table .wheel-card-fallback {
+.wheels li > img {
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: contain;
 }
 
-body.window-table.collection-wheel-mode .wheel-card {
-  aspect-ratio: 1 / 1;
-  width: calc(23 * var(--vw));
-  max-width: calc(30 * var(--vh));
-  min-width: calc(20 * var(--vh));
-}
-
-body.window-table.collection-wheel-mode .wheel-card.is-selected {
-  filter:
-    drop-shadow(0 0 calc(2.2 * var(--vh)) rgba(47, 210, 255, 1))
-    drop-shadow(0 calc(1.1 * var(--vh)) calc(2 * var(--vh)) rgba(0, 0, 0, 0.8));
-}
-
-body.window-table.collection-wheel-mode .wheel-card-shell {
-  display: grid;
-  place-items: center;
-}
-
-body.window-table.collection-wheel-mode .wheel-card img {
-  width: auto;
-  height: auto;
-  max-width: 72%;
-  max-height: 72%;
-  object-fit: contain;
-}
-
-body.window-table.collection-wheel-mode .wheel-card-fallback {
-  border: calc(0.2 * var(--vh)) solid rgba(47, 210, 255, 0.72);
-  border-radius: calc(1.4 * var(--vh));
-  background: rgba(3, 9, 18, 0.84);
-  color: #e8fbff;
-  padding: calc(1.4 * var(--vh));
-  text-align: center;
-  box-shadow: 0 0 calc(2 * var(--vh)) rgba(47, 210, 255, 0.24);
-}
-
-body.window-table .wheel-card-shell {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  box-sizing: border-box;
-  border-radius: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-body.window-table .wheel-card-fallback {
-  display: grid;
-  place-items: center;
-  padding: calc(0.5 * var(--vh)) calc(0.7 * var(--vw));
-  box-sizing: border-box;
+.wheel-label {
+  padding: 0.5cqmin 0.7cqmin;
   color: rgba(248, 250, 255, 0.95);
-  font-size: calc(1.2 * var(--vh));
+  font-size: 1.6cqmin;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-align: center;
+  overflow-wrap: anywhere;
+  max-height: 100%;
+  overflow: hidden;
 }
 
-body.window-table .wheel-card img {
-  border-radius: 0;
-  object-fit: contain;
+/* In the collection picker the wheel is collections: a picture inside a ring, lit blue. */
+.stage[data-view="collections"] .wheels li > img {
+  width: auto;
+  height: auto;
+  max-width: 72%;
+  max-height: 72%;
 }
 
-body.window-table .table-meta-panel {
+.stage[data-view="collections"] .wheels li.selected {
+  filter:
+    drop-shadow(0 0 2.2cqmin rgba(47, 210, 255, 1))
+    drop-shadow(0 1.1cqmin 2cqmin rgba(0, 0, 0, 0.8));
+}
+
+.stage[data-view="collections"] .wheel-label {
+  border: 0.2cqmin solid rgba(47, 210, 255, 0.72);
+  border-radius: 1.4cqmin;
+  background: rgba(3, 9, 18, 0.84);
+  color: #e8fbff;
+  box-shadow: 0 0 2cqmin rgba(47, 210, 255, 0.24);
+}
+
+/* --- The panel -------------------------------------------------------------------- */
+/* The panel is a container of its own, so its text is sized by its width: the same
+   proportions on a narrow cabinet screen and a wide desktop one. */
+.panel {
   position: absolute;
-  right: calc(-11.5 * var(--vh));
-  bottom: calc(calc(35 * var(--vh)) - calc(8 * var(--vw)));
-  width: calc(70 * var(--vh));
-  min-height: calc(16 * var(--vw));
-  padding: calc(1.9 * var(--vh)) calc(1.7 * var(--vw)) calc(1.9 * var(--vh)) calc(1.5 * var(--vw));
+  left: 50%;
+  bottom: 3cqmin;
+  width: 88cqw;
+  transform: translateX(-50%);
+  container-type: inline-size;
+  padding: 3cqw 3.4cqw;
   box-sizing: border-box;
-  border: calc(0.28 * var(--vh)) solid rgba(118, 224, 255, 0.85);
-  border-radius: calc(3 * var(--vh));
+  border: 0.28cqmin solid rgba(118, 224, 255, 0.85);
+  border-radius: 4cqw;
   background:
     radial-gradient(circle at top left, rgba(86, 188, 255, 0.14) 0%, rgba(86, 188, 255, 0) 32%),
     linear-gradient(180deg, rgba(12, 20, 32, 0.76) 0%, rgba(5, 10, 18, 0.92) 100%);
-  backdrop-filter: blur(calc(0.5 * var(--vh)));
+  backdrop-filter: blur(0.5cqmin);
   box-shadow:
-    0 0 calc(0.35 * var(--vh)) rgba(171, 244, 255, 0.92),
-    0 0 calc(1.2 * var(--vh)) rgba(78, 199, 255, 0.82),
-    0 0 calc(2.6 * var(--vh)) rgba(33, 127, 255, 0.34),
-    inset 0 0 calc(0.24 * var(--vh)) rgba(215, 251, 255, 0.78),
-    inset 0 0 calc(1.5 * var(--vh)) rgba(43, 118, 190, 0.2);
-  color: #f5f7fb;
-  z-index: 3;
-  transform: rotate(-90deg);
-  transform-origin: center center;
-  opacity: 1;
+    0 0 0.35cqmin rgba(171, 244, 255, 0.92),
+    0 0 1.2cqmin rgba(78, 199, 255, 0.82),
+    0 0 2.6cqmin rgba(33, 127, 255, 0.34),
+    inset 0 0 0.24cqmin rgba(215, 251, 255, 0.78),
+    inset 0 0 1.5cqmin rgba(43, 118, 190, 0.2);
+  z-index: 4;
 }
 
-body.window-table .table-meta-panel.is-entering {
-  animation: table-meta-slide-in 620ms ease;
+/* A wide screen: the panel sits in the bottom right corner. */
+@container (min-aspect-ratio: 1/1) {
+  .panel {
+    left: auto;
+    right: 2.5cqmin;
+    width: min(40cqw, 90cqh);
+    transform: none;
+  }
 }
 
-@keyframes table-meta-slide-in {
+.panel.entering {
+  animation: panel-in 0.62s ease;
+}
+
+/* The slide uses the translate property so it composes with the panel's own transform. */
+@keyframes panel-in {
   from {
-    transform: translateY(calc(48 * var(--vh))) rotate(-90deg);
+    translate: 0 20cqh;
     opacity: 0;
   }
 
   to {
-    transform: translateY(0) rotate(-90deg);
+    translate: 0 0;
     opacity: 1;
   }
 }
 
-body.window-table .table-meta-kicker {
-  margin-bottom: calc(0.8 * var(--vh));
-  color: rgba(173, 195, 223, 0.92);
-  font-size: calc(1.35 * var(--vh));
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
-body.window-table .table-meta-title {
+.panel h1 {
   margin: 0;
-  font-family: "RocketCommandExpanded", "Trebuchet MS", Arial, sans-serif;
-  font-size: clamp(calc(1.55 * var(--vh)), calc(1.25 * var(--vw)), calc(2.3 * var(--vh)));
+  font-family: "Rocket Command Expanded", "Trebuchet MS", Arial, sans-serif;
+  font-size: 4cqw;
   line-height: 0.95;
   text-transform: uppercase;
-  text-shadow: 0 calc(0.25 * var(--vh)) calc(1.2 * var(--vh)) rgba(0, 0, 0, 0.45);
+  text-shadow: 0 0.25cqmin 1.2cqmin rgba(0, 0, 0, 0.45);
+  overflow-wrap: anywhere;
 }
 
-body.window-table .table-meta-authors {
-  margin-top: calc(1 * var(--vh));
-  font-family: "RocketCommandGradient", "Trebuchet MS", Arial, sans-serif;
+.panel p {
+  margin: 0;
+}
+
+#authors {
+  margin-top: 1.6cqw;
+  font-family: "Rocket Command Gradient", "Trebuchet MS", Arial, sans-serif;
   color: rgba(207, 217, 235, 0.88);
-  font-size: calc(1.5 * var(--vh));
+  font-size: 2.6cqw;
   font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 1.25;
 }
 
-body.window-table .table-meta-line {
+#authors:empty {
+  display: none;
+}
+
+.facts {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: calc(0.7 * var(--vh)) calc(0.7 * var(--vw));
-  margin-top: calc(1.35 * var(--vh));
-  font-family: "RocketCommandGradient", "Trebuchet MS", Arial, sans-serif;
+  gap: 1cqw 1.4cqw;
+  margin-top: 2.2cqw;
+  font-family: "Rocket Command Gradient", "Trebuchet MS", Arial, sans-serif;
   color: rgba(225, 232, 244, 0.92);
-  font-size: calc(1.65 * var(--vh));
+  font-size: 2.9cqw;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-body.window-table .table-meta-stats {
+.facts i {
+  width: 0.9cqw;
+  height: 0.9cqw;
+  border-radius: 50%;
+  background: rgba(190, 204, 229, 0.82);
+}
+
+.stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: calc(1.2 * var(--vh)) calc(1 * var(--vw));
-  margin-top: calc(1.8 * var(--vh));
+  gap: 2cqw;
+  margin-top: 3cqw;
 }
 
-body.window-table .table-meta-stat {
+.stat {
   display: flex;
   flex-direction: column;
-  gap: calc(0.45 * var(--vh));
-  padding: calc(0.9 * var(--vh)) calc(0.8 * var(--vw));
-  border-radius: calc(1.3 * var(--vh));
+  gap: 0.8cqw;
+  padding: 1.5cqw 1.4cqw;
+  border-radius: 2.2cqw;
   background: rgba(9, 18, 30, 0.28);
-  box-shadow: inset 0 0 0 calc(0.12 * var(--vh)) rgba(179, 242, 255, 0.16);
+  box-shadow: inset 0 0 0 0.2cqw rgba(179, 242, 255, 0.16);
 }
 
-body.window-table .table-meta-stat-label {
+.stat-label {
   color: #dff6ff;
-  font-family: "RocketCommandExpanded", "Trebuchet MS", Arial, sans-serif;
-  font-size: calc(1.1 * var(--vh));
+  font-family: "Rocket Command Expanded", "Trebuchet MS", Arial, sans-serif;
+  font-size: 1.9cqw;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   text-shadow:
-    0 0 calc(0.25 * var(--vh)) rgba(223, 246, 255, 0.9),
-    0 0 calc(0.7 * var(--vh)) rgba(111, 227, 255, 0.4);
+    0 0 0.4cqw rgba(223, 246, 255, 0.9),
+    0 0 1.2cqw rgba(111, 227, 255, 0.4);
 }
 
-body.window-table .table-meta-stat-value {
-  color: rgba(244, 249, 255, 0.96);
-  font-size: calc(1.7 * var(--vh));
+.stat-value {
+  font-family: "Rocket Command Expanded", "Trebuchet MS", Arial, sans-serif;
+  color: #ffe14f;
+  font-size: 3cqw;
   font-weight: 700;
   letter-spacing: 0.04em;
-}
-
-#tableRating.table-meta-stat-value {
-  font-family: "RocketCommandExpanded", "Trebuchet MS", Arial, sans-serif;
-  color: #ffe14f;
   text-shadow:
-    0 0 calc(0.3 * var(--vh)) rgba(255, 237, 145, 0.95),
-    0 0 calc(0.9 * var(--vh)) rgba(255, 212, 61, 0.65);
+    0 0 0.5cqw rgba(255, 237, 145, 0.95),
+    0 0 1.5cqw rgba(255, 212, 61, 0.65);
 }
 
-#tableVPinPlayRating.table-meta-stat-value {
-  font-family: "RocketCommandExpanded", "Trebuchet MS", Arial, sans-serif;
-  color: #ffe14f;
-  text-shadow:
-    0 0 calc(0.3 * var(--vh)) rgba(255, 237, 145, 0.95),
-    0 0 calc(0.9 * var(--vh)) rgba(255, 212, 61, 0.65);
-}
-
-body.window-table .table-meta-counter-strip {
+/* The picture is the dial; the numbers are written into its two windows. */
+.counters {
   position: relative;
   width: 100%;
   aspect-ratio: 1306 / 272;
-  min-height: calc(14 * var(--vh));
-  margin-top: calc(1.6 * var(--vh));
+  margin-top: 2.8cqw;
   background: url("img/runtime-startcount.png") center / contain no-repeat;
 }
 
-body.window-table .table-meta-counter {
+.counter {
   position: absolute;
-  z-index: 1;
-  display: inline-block;
+  top: 52%;
   min-width: 3ch;
+  transform: translate(-50%, -50%);
   white-space: nowrap;
   text-align: center;
-  font-family: "Roboto-Bold", "Trebuchet MS", Arial, sans-serif;
-  font-size: calc(2.45 * var(--vh));
+  font-family: "Roboto Bold", "Trebuchet MS", Arial, sans-serif;
+  font-size: 4.2cqw;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1;
 }
 
-body.window-table .table-meta-counter-runtime {
+.runtime {
   left: 39.8%;
-  top: 52%;
-  transform: translate(-50%, -50%);
   color: #9be8ff;
   text-shadow:
-    0 0 calc(0.45 * var(--vh)) rgba(155, 232, 255, 0.95),
-    0 0 calc(1.25 * var(--vh)) rgba(89, 208, 255, 0.55);
+    0 0 0.8cqw rgba(155, 232, 255, 0.95),
+    0 0 2cqw rgba(89, 208, 255, 0.55);
 }
 
-body.window-table .table-meta-counter-starts {
+.starts {
   left: 88.2%;
-  top: 52%;
-  transform: translate(-50%, -50%);
   color: #ffd84d;
   text-shadow:
-    0 0 calc(0.45 * var(--vh)) rgba(255, 216, 77, 0.95),
-    0 0 calc(1.25 * var(--vh)) rgba(255, 140, 54, 0.42);
+    0 0 0.8cqw rgba(255, 216, 77, 0.95),
+    0 0 2cqw rgba(255, 140, 54, 0.42);
 }
 
-body.window-table .table-meta-separator {
-  width: calc(0.55 * var(--vh));
-  height: calc(0.55 * var(--vh));
-  border-radius: 50%;
-  background: rgba(190, 204, 229, 0.82);
+/* A collection has no ratings or counts: only its name, its size and its kind. */
+.stage[data-view="collections"] .stats,
+.stage[data-view="collections"] .counters {
+  display: none;
 }
 
-body.window-table .table-meta-subline {
-  margin-top: calc(1.6 * var(--vh));
-  color: rgba(194, 205, 224, 0.78);
-  font-size: calc(1.35 * var(--vh));
-  line-height: 1.35;
-  word-break: break-word;
+#empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-size: 4cqmin;
+  color: rgba(244, 244, 244, 0.55);
+}
+
+/* The loading indicator is core's. This gives it the panel's blue. */
+.vpinfe-launch-spinner {
+  border-top-color: rgba(118, 224, 255, 0.95);
 }

@@ -1,10 +1,11 @@
 {
   "name": "Trinidad",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "author": "superhac",
-  "description": "A cab theme with arc'ed wheel.  Has attract mode.",
+  "description": "A cabinet theme with an arc of wheels across the top, the playfield picture behind it and a glowing panel about the selected table.",
   "preview_image": "preview.png",
-  "supported_screens": 3,
-  "type": "cab",
-  "change_log": "Fix the table screen and menus on a portrait display set to orientation portrait"
+  "type": "both",
+  "change_log": "Rebuilt for VPinFE 3.0: core now handles input, audio, preloading, the loading indicator, attract mode, turning the page for a sideways screen and the backglass and score view pages. The collection picker is core's. The page is drawn upright and fits any screen shape.",
+  "min_vpinfe": "3.0",
+  "windows": ["playfield"]
 }
