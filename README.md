@@ -19,6 +19,7 @@ options.json          the options a person can change, with their defaults
 index_playfield.html  the playfield page
 style.css             the look
 theme.js              the behavior
+locales/en.json       the theme's own words; add <language>.json to translate them
 fonts/                Rocket Command Expanded and Gradient, and Roboto Bold
 img/                  the runtime and start count dial, and the collection backdrop
 preview.png           shown in the theme list

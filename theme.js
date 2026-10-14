@@ -23,6 +23,8 @@ async function start() {
   });
 
   document.getElementById("my-rating-label").textContent = vpin.t("frontend.theme.my_rating", "My Rating");
+  document.getElementById("counters").setAttribute(
+    "aria-label", vpin.t("theme.counters", "Runtime and Start Count"));
   if (option("startCollectionSelection", false)) await vpin.openCollectionPicker();
 
   draw();
@@ -193,8 +195,10 @@ function drawTable(entry, index) {
 function drawCollection(row) {
   titleEl.textContent = row.label;
   const count = row.table_count;
-  authorsEl.textContent = Number.isFinite(count) ? `${count} ${count === 1 ? "Table" : "Tables"}` : "";
-  drawFacts([row.is_filter ? "Filter" : "Collection"]);
+  authorsEl.textContent = Number.isFinite(count)
+    ? vpin.t("theme.tables", { one: "{count} Table", other: "{count} Tables" }, { count })
+    : "";
+  drawFacts([row.is_filter ? vpin.t("theme.filter", "Filter") : vpin.t("theme.collection", "Collection")]);
 
   artFader.show("backdrop", () => {
     const node = image("img/collection_background.png");
@@ -230,9 +234,11 @@ function communityRating(entry) {
 // Whole minutes under an hour, then hours.
 function runtime(seconds) {
   const minutes = Math.floor((Number(seconds) || 0) / 60);
-  if (minutes < 60) return `${Math.max(0, minutes)}m`;
+  if (minutes < 60) return vpin.t("theme.minutes_short", "{count}m", { count: Math.max(0, minutes) });
   const hours = minutes / 60;
-  return Number.isInteger(hours) ? `${hours}h` : `${hours.toFixed(1)}h`;
+  return vpin.t("theme.hours_short", "{count}h", {
+    count: Number.isInteger(hours) ? hours : hours.toFixed(1),
+  });
 }
 
 // The art. A fader holds the picture on screen. A new one loads at the back and fades in

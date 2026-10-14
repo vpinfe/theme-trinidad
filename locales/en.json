@@ -1,0 +1,12 @@
+{
+  "collection": "Collection",
+  "filter": "Filter",
+  "vpinplay_rating": "VPinPlay Rating",
+  "counters": "Runtime and Start Count",
+  "minutes_short": "{count}m",
+  "hours_short": "{count}h",
+  "tables": {
+    "one": "{count} Table",
+    "other": "{count} Tables"
+  }
+}
