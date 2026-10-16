@@ -3,8 +3,7 @@
   "version": "2.0.0",
   "author": "superhac",
   "description": "A cabinet theme with an arc of wheels across the top, the playfield picture behind it and a glowing panel about the selected table.",
-  "preview_image": "preview.png",
-  "type": "both",
+  "layouts": {"cab": "preview.png", "desktop": "preview-desktop.png"},
   "change_log": "Rebuilt for VPinFE 3.0.\n\nCore now handles input, audio, preloading, the loading indicator, attract mode, turning the page for a sideways screen and the backglass and score view pages. The page is drawn upright and fits any screen shape.\n\nThe playfield art is the video or picture that Playfield Media Priority in VPinFE's settings asks for.\n\nStart in Collection Selection carries over from VPinFE 2.x. When it is off, Trinidad starts on the collection set by Open On in VPinFE's settings.",
   "min_vpinfe": "3.0",
   "windows": ["playfield"]
